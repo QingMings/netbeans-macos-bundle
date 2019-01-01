@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # these need to be updated for new versions.
-NETBEANS_VERSION='9'
+NETBEANS_VERSION='10'
 NETBEANS_URI="https://mirrors.tuna.tsinghua.edu.cn/apache/incubator/netbeans/incubating-netbeans/incubating-10.0/incubating-netbeans-10.0-bin.zip"
-NETBEANS_SHA1_URI="https://www-eu.apache.org/dist/incubator/netbeans/incubating-netbeans-java/incubating-9.0/"`basename "${NETBEANS_URI}"`".sha1"
+NETBEANS_SHA512_URI="https://www-us.apache.org/dist/incubator/netbeans/incubating-netbeans/incubating-10.0/"`basename "${NETBEANS_URI}"`".sha512"
 
 show_help() {
     echo "./install-custom.sh [options]"
@@ -71,7 +71,7 @@ case $key in
     NETBEANS_URI="$2"
     echo "Disabling the integrity check because -u | --netbeans-uri has been used."
     echo
-    NETBEANS_SHA1_URI=""
+    NETBEANS_SHA512_URI=""
     shift
     shift
     ;;    
@@ -159,12 +159,9 @@ cat >> "${TMPFILE}" << EOT
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
-
 Copyright (c) 2008, 2016 Oracle and/or its affiliates. All rights reserved.
-
 Oracle and Java are registered trademarks of Oracle and/or its affiliates.
 Other names may be trademarks of their respective owners.
-
 The contents of this file are subject to the terms of either the GNU
 General Public License Version 2 only ("GPL") or the Common
 Development and Distribution License("CDDL") (collectively, the
@@ -182,7 +179,6 @@ accompanied this code. If applicable, add the following below the
 License Header, with the fields enclosed by brackets [] replaced by
 your own identifying information:
 "Portions Copyrighted [year] [name of copyright owner]"
-
 If you wish your version of this file to be governed by only the CDDL
 or only the GPL Version 2, indicate your decision by adding
 "[Contributor] elects to include this software in this distribution
@@ -193,7 +189,6 @@ to extend the choice of license to its licensees as provided above.
 However, if you add GPL Version 2 code and therefore, elected the GPL
 Version 2 license, then the option applies only if the new code is
 made subject to such option by the copyright holder.
-
 Contributor(s):
 -->
 <!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
@@ -201,31 +196,22 @@ Contributor(s):
   <dict>
     <key>CFBundleName</key>
     <string>NetBeans ${NETBEANS_VERSION}</string>
-
     <key>CFBundleVersion</key>
     <string>${NETBEANS_VERSION}</string>
-
     <key>CFBundleExecutable</key>
     <string>netbeans</string>
-
     <key>CFBundlePackageType</key>
     <string>APPL</string>
-
     <key>CFBundleShortVersionString</key>
     <string>${NETBEANS_VERSION}</string>
-
     <key>CFBundleIdentifier</key>
     <string>org.netbeans.ide.baseide.${NETBEANS_VERSION}</string>
-
     <key>CFBundleSignature</key>
     <string>NETB</string>
-
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
-
     <key>CFBundleIconFile</key>
     <string>netbeans.icns</string>
-
     <key>CFBundleDocumentTypes</key>
     <array>
 	<dict>
@@ -239,10 +225,8 @@ Contributor(s):
 		</array>
 	</dict>
     </array>
-
     <key>NSHighResolutionCapable</key>
     <true/>
-
     <key>NSSupportsAutomaticGraphicsSwitching</key>
     <true/>
     
@@ -259,14 +243,14 @@ TMPFILE=`mktemp`
 echo "Downloading ${NETBEANS_URI}..."
 curl ${PROGRESSBAR} -o "${TMPFILE}" "${NETBEANS_URI}"
 
-# if $NETBEANS_SHA1_URI is set, verify the integrity
-if [ ! -z "${NETBEANS_SHA1_URI}" ]; then
-    EXPECTED_SHA1=`curl -fsSL "${NETBEANS_SHA1_URI}" |cut -d " " -f 1`
-    REAL_SHA1=`shasum -a 1 "${TMPFILE}" |cut -d " " -f 1`
-    echo "Expected SHA1 checksum: ${EXPECTED_SHA1}"
-    echo "File SHA1 checksum:     ${REAL_SHA1}"
+# if $NETBEANS_SHA512_URI is set, verify the integrity
+if [ ! -z "${NETBEANS_SHA512_URI}" ]; then
+    EXPECTED_SHA512=`curl -fsSL "${NETBEANS_SHA512_URI}" |cut -d " " -f 1`
+    REAL_SHA512=`shasum -a 512 "${TMPFILE}" |cut -d " " -f 1`
+    echo "Expected SHA512 checksum: ${EXPECTED_SHA512}"
+    echo "File SHA512 checksum:     ${REAL_SHA512}"
 
-    if [ "${EXPECTED_SHA1}" != "${REAL_SHA1}" ]; then
+    if [ "${EXPECTED_SHA512}" != "${REAL_SHA512}" ]; then
         echo "Cleaning up..."
         rm "${TMPFILE}"
         echo "Checksum mismatch! Exiting."
