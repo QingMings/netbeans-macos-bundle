@@ -2,7 +2,7 @@
 
 # these need to be updated for new versions.
 NETBEANS_VERSION='9'
-NETBEANS_URI="http://mirrors.tuna.tsinghua.edu.cn/apache/incubator/netbeans/incubating-netbeans-java/incubating-9.0/incubating-netbeans-java-9.0-bin.zip"
+NETBEANS_URI="https://mirrors.tuna.tsinghua.edu.cn/apache/incubator/netbeans/incubating-netbeans/incubating-10.0/incubating-netbeans-10.0-bin.zip"
 NETBEANS_SHA1_URI="https://www-eu.apache.org/dist/incubator/netbeans/incubating-netbeans-java/incubating-9.0/"`basename "${NETBEANS_URI}"`".sha1"
 
 show_help() {
